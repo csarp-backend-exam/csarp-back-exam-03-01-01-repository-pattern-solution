@@ -7,5 +7,14 @@ namespace Kreata.Backend.Repos
         where TEntity : class, new()
 
     {
+        private readonly IDbContextFactory<TDbContext> _dbContextFactory;
+        private DbSet<TEntity>? _dbSet;
+
+        public RepositoryBase(IDbContextFactory<TDbContext> dbContextFactory)
+        {
+            _dbContextFactory = dbContextFactory;
+            TDbContext dbContext = _dbContextFactory.CreateDbContext();
+            _dbSet = dbContext.Set<TEntity>();
+        }
     }
 }
