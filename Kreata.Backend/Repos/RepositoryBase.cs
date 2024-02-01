@@ -37,15 +37,20 @@ namespace Kreata.Backend.Repos
             return _dbSet.FirstOrDefault(entity => entity.Id == id) ?? new TEntity();
         }
 
+        public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
+        {
+            if (_dbSet is null)
+            {
+                return Enumerable.Empty<TEntity>().AsQueryable().AsNoTracking();
+            }
+            return _dbSet.Where(expression).AsNoTracking();
+        }
+
         public Task<ControllerResponse> DeleteAsync(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<ControllerResponse> InsertAsync(TEntity entity)
         {
