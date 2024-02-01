@@ -13,6 +13,13 @@ namespace Kreata.Backend.Repos
         private readonly IDbContextFactory<TDbContext> _dbContextFactory;
         private DbSet<TEntity>? _dbSet;
 
+        public RepositoryBase(IDbContextFactory<TDbContext> dbContextFactory)
+        {
+            _dbContextFactory = dbContextFactory;
+            TDbContext dbContext = _dbContextFactory.CreateDbContext();
+            _dbSet = dbContext.Set<TEntity>();
+        }
+
         public IQueryable<TEntity> FindAll()
         {
             if (_dbSet is null)
@@ -28,13 +35,6 @@ namespace Kreata.Backend.Repos
                 return new TEntity();
             }
             return _dbSet.FirstOrDefault(entity => entity.Id == id) ?? new TEntity();
-        }
-
-        public RepositoryBase(IDbContextFactory<TDbContext> dbContextFactory)
-        {
-            _dbContextFactory = dbContextFactory;
-            TDbContext dbContext = _dbContextFactory.CreateDbContext();
-            _dbSet = dbContext.Set<TEntity>();
         }
 
         public Task<ControllerResponse> DeleteAsync(Guid id)
