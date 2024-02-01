@@ -12,6 +12,15 @@ namespace Kreata.Backend.Repos
         private readonly IDbContextFactory<TDbContext> _dbContextFactory;
         private DbSet<TEntity>? _dbSet;
 
+        public IQueryable<TEntity> FindAll()
+        {
+            if (_dbSet is null)
+            {
+                return Enumerable.Empty<TEntity>().AsQueryable().AsNoTracking();
+            }
+            return _dbSet.AsNoTracking();
+        }
+
         public RepositoryBase(IDbContextFactory<TDbContext> dbContextFactory)
         {
             _dbContextFactory = dbContextFactory;
@@ -20,11 +29,6 @@ namespace Kreata.Backend.Repos
         }
 
         public Task<ControllerResponse> DeleteAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IQueryable<TEntity> FindAll()
         {
             throw new NotImplementedException();
         }
