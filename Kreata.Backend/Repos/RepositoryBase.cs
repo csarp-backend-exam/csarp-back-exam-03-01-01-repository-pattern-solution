@@ -20,6 +20,14 @@ namespace Kreata.Backend.Repos
             }
             return _dbSet.AsNoTracking();
         }
+        public TEntity GetById(Guid id)
+        {
+            if (_dbSet is null)
+            {
+                return new TEntity();
+            }
+            return _dbSet.FirstOrDefault(entity => entity.Id == id) ?? new TEntity();
+        }
 
         public RepositoryBase(IDbContextFactory<TDbContext> dbContextFactory)
         {
@@ -34,11 +42,6 @@ namespace Kreata.Backend.Repos
         }
 
         public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
-        {
-            throw new NotImplementedException();
-        }
-
-        public TEntity GetById(Guid id)
         {
             throw new NotImplementedException();
         }
