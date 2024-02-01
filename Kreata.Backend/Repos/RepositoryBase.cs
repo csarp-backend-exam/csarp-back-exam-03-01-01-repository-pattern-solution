@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Kreta.Shared.Responses;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Kreata.Backend.Repos
 {
@@ -15,6 +17,36 @@ namespace Kreata.Backend.Repos
             _dbContextFactory = dbContextFactory;
             TDbContext dbContext = _dbContextFactory.CreateDbContext();
             _dbSet = dbContext.Set<TEntity>();
+        }
+
+        public Task<ControllerResponse> DeleteAsync(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<TEntity> FindAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<TEntity> FindByCondition(Expression<Func<TEntity, bool>> expression)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TEntity GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ControllerResponse> InsertAsync(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ControllerResponse> UpdateAsync(TEntity entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
