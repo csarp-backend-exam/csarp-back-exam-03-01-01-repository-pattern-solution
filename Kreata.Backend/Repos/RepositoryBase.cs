@@ -1,4 +1,5 @@
-﻿using Kreta.Shared.Responses;
+﻿using Kreta.Shared.Models;
+using Kreta.Shared.Responses;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -6,7 +7,7 @@ namespace Kreata.Backend.Repos
 {
     public class RepositoryBase<TDbContext, TEntity> : IRepositoryBase<TEntity>
         where TDbContext : DbContext
-        where TEntity : class, new()
+        where TEntity : class, IDbEntity<TEntity>, new()
 
     {
         private readonly IDbContextFactory<TDbContext> _dbContextFactory;
