@@ -96,9 +96,40 @@ namespace Kreata.Backend.Repos
         }
 
 
-        public Task<ControllerResponse> InsertAsync(TEntity entity)
+        public async Task<ControllerResponse> InsertAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            if (entity.HasId)
+            {
+                return await UpdateAsync(entity);
+            }
+            else
+            {
+                return await InsertNewItemAsync(entity);
+            }
+        }
+
+        private async Task<ControllerResponse> InsertNewItemAsync(TEntity entity)
+        {
+            ControllerResponse response = new ControllerResponse();
+            if (_dbSet is null)
+            {
+                response.AppendNewError($"{entity} osztály hozzáadása az adatbázishoz nem sikerült!");
+            }
+            else
+            {
+                try
+                {
+                    _dbSet.Add(entity);
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    response.AppendNewError(e.Message);
+                    response.AppendNewError($"{nameof(RepositoryBase<TDbContext, TEntity>)} osztály, {nameof(InsertNewItemAsync)} metódusban hiba keletkezett");
+                    response.AppendNewError($"{entity} osztály hozzáadása az adatbázishoz nem sikerült!");
+                }
+            }
+            return response;
         }
     }
 }
