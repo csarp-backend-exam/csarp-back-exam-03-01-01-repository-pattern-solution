@@ -67,9 +67,32 @@ namespace Kreata.Backend.Repos
             return response;
         }
 
-        public Task<ControllerResponse> DeleteAsync(Guid id)
+        public async Task<ControllerResponse> DeleteAsync(Guid id)
         {
-            throw new NotImplementedException();
+            ControllerResponse response = new ControllerResponse();
+            TEntity studentToDelete = GetById(id);
+            if (!studentToDelete.HasId)
+            {
+                response.AppendNewError($"{id} idével rendelkező entitás nem található!");
+                response.AppendNewError("Az entitás törlése nem sikerült!");
+            }
+            else
+            {
+                try
+                {
+                    _dbContext.ChangeTracker.Clear();
+                    _dbContext.Entry(studentToDelete).State = EntityState.Deleted;
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    response.AppendNewError(e.Message);
+                    response.AppendNewError($"{nameof(RepositoryBase<TDbContext, TEntity>)} osztály, {nameof(DeleteAsync)} metódusban hiba keletkezett");
+                    response.AppendNewError($"Az entitás id:{id}");
+                    response.AppendNewError($"Az entitás törlése nem sikerült!");
+                }
+            }
+            return response;
         }
 
 
